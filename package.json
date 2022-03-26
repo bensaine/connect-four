@@ -1,10 +1,12 @@
 {
-  "name": "svelte-app",
+  "name": "connect-four",
   "version": "1.0.0",
   "private": true,
   "scripts": {
     "build": "rollup -c",
-    "dev": "rollup -c -w",
+    "dev-client": "rollup -c -w",
+    "dev-server": "nodemon ./server/index.js",
+    "server": "node ./server/index.js",
     "start": "sirv public --no-clear"
   },
   "devDependencies": {
@@ -18,6 +20,10 @@
     "svelte": "^3.0.0"
   },
   "dependencies": {
-    "sirv-cli": "^2.0.0"
-  }
+    "sirv-cli": "^2.0.0",
+    "socket.io": "^4.4.1",
+    "socket.io-client": "^4.4.1",
+    "uuid": "^8.3.2"
+  },
+  "type": "module"
 }
