@@ -1,7 +1,7 @@
 import { writable } from "svelte/store"
 import io from 'socket.io-client'
 
-export const socketStore = writable(io(":3000"))
+export const socketStore = writable(io("https://connect-four-server-ben.herokuapp.com"))
 const localSession = localStorage.getItem("sessionId")
 export const sessionStore = writable(localSession)
 sessionStore.subscribe(value => localStorage.setItem("sessionId", value))
