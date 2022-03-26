@@ -10,7 +10,7 @@ export const roomStore = new RoomStore();
 const httpServer = createServer();
 const io = new Server(httpServer, {
   cors: {
-    origin: "*"
+    origin: "https://connect-four-bensaine.herokuapp.com"
   }
 })
 
