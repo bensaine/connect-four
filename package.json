@@ -7,7 +7,7 @@
     "dev-client": "rollup -c -w",
     "dev-server": "nodemon ./server/index.js",
     "server": "node ./server/index.js",
-    "start": "node build",
+    "start": "node ./server/index.js",
     "startr": "sirv public --no-clear",
     "heroku-postbuild": "rollup -c"
   },
