@@ -9,7 +9,7 @@
     "server": "node ./server/index.js",
     "start": "node ./server/index.js",
     "startr": "sirv public --no-clear",
-    "heroku-postbuild": "rollup -c"
+    "heroku-postbuild": "node ./server/index.js"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.0.0",
