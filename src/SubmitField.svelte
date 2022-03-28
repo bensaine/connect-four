@@ -34,7 +34,7 @@
         border: 0.15em solid #ddd;
     }
 
-    .submit.valid :global(input) {
+    .submit.valid :global(input), .submit.valid :global(input:hover), .submit.valid :global(input:focus) {
         border: 0.15em solid #eee4da;
     }
 

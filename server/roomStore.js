@@ -11,7 +11,7 @@ export class RoomStore {
         return this.rooms.find(room => room.players.find(player => player.userId == id));
     }
 
-    findPlayerTeam(id, room = null) {
+    findPlayerTeamId(id, room = null) {
         room = room ? this.findRoomByPlayer(id) : room
         if (room) {
             return room.players.find(player => player.userId == id).team;

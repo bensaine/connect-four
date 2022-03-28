@@ -1,12 +1,10 @@
 <script>
 	import Board from './Board.svelte'
-	import { socketStore, sessionStore, userStore, roomStore } from './store.js'
+	import { socketStore, sessionStore, userStore, roomStore, getUserTeam } from './store.js'
 	import Join from './Join.svelte';
+	import EndDialog from './EndDialog.svelte';
 	import { onMount } from 'svelte';
-	import Button from './Button.svelte';
 	import PlayerList from './PlayerList.svelte';
-	let soundPlayer
-	let board = []
 
 	onMount(() => {
 		const sessionId = $sessionStore;
@@ -39,8 +37,12 @@
 	});
 
 	$socketStore.on('playSound', (url) => {
-		soundPlayer.src = url
-        soundPlayer.play()
+		let soundPlayer = new Audio(url);
+		soundPlayer.play()
+	});
+
+	$socketStore.on('gameWon', (team) => {
+		console.log("gameWon", team)
 	});
 	
 	export function getUser(userId) {
@@ -56,26 +58,28 @@
 
 <main>
 	<h1>Connect Four!</h1>
-	{#if !$roomStore || Object.keys($roomStore).length == 0}
-		<Join />
-	{:else}
-		<PlayerList players={$roomStore.players} teams={$roomStore.teams} turn={$roomStore.turn}/>
-		<Board bind:this={board} board={$roomStore.board} width={$roomStore.boardWidth} height={$roomStore.boardHeight}/>
-		<div class="room-code">
-			<span>{$roomStore.id}</span>
-			<svg on:click={() => {navigator.clipboard.writeText($roomStore.id)}} xmlns="http://www.w3.org/2000/svg" class="btn-copy" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-				<path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-			</svg>
-		</div>
-	{/if}
-	<audio bind:this={soundPlayer} class="audio"></audio>
+	<div class="content">
+		{#if !$roomStore || Object.keys($roomStore).length == 0}
+			<Join />
+		{:else}
+			<PlayerList players={$roomStore.players} teams={$roomStore.teams} turn={$roomStore.turn}/>
+			<Board board={$roomStore.board} width={$roomStore.boardWidth} height={$roomStore.boardHeight}/>
+			<div class="room-code">
+				<span>{$roomStore.id}</span>
+				<svg on:click={() => {navigator.clipboard.writeText($roomStore.id)}} xmlns="http://www.w3.org/2000/svg" class="btn-copy" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+				</svg>
+			</div>
+			<EndDialog />
+		{/if}
+	</div>
 </main>
 
 <style>
 	main {
 		text-align: center;
-		padding: 1em;
-		margin: 0 auto;
+		margin: 0;
+		height: 100vh;
 	}
 
 	h1 {
@@ -83,6 +87,14 @@
 		text-transform: uppercase;
 		font-size: 4em;
 		font-weight: 100;
+	}
+
+	.content {
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		min-height: 50%;
 	}
 
 	.room-code {
@@ -98,15 +110,13 @@
 		position: fixed;
 		bottom: 0;
 		right: 0;
+		z-index: 1;
 	}
 
 	.btn-copy {
 		cursor: pointer;
 		width: 1.5em;
 	}
-	.audio {
-        display: none;
-    }
 
 	@media (min-width: 640px) {
 		main {

@@ -29,18 +29,14 @@
         if (roomCodeValid) {
             $socketStore.emit('getRoomById', { id: roomCode }, (room) => {
                 roomCodeValid = Boolean(room)
-                console.log("valid", roomCodeValid, room, roomCode)
             })
         }
     }
 
-    const handleRoomJoinClick = () => {
+    const handleRoomCodeSubmit = () => {
+        if (!roomCodeValid) return
         $socketStore.emit('joinRoom', { id: roomCode }, (room) => {
-            if (room.error) {
-                console.error(room.error)
-                return
-            }
-            console.log("room", room)	
+            if (room.error) return
             $roomStore = room
             console.log("roomStore", $roomStore)
         });
@@ -66,8 +62,8 @@
 	{/if}
 	{#if joinMode}
 		<SubmitField valid={roomCodeValid}>
-			<TextField slot="input" placeholder="Room Code" on:input={handleRoomCodeInput} />
-			<Button slot="button" on:click|once={handleRoomJoinClick} disabled={!roomCodeValid}>
+			<TextField slot="input" placeholder="Room Code" on:input={handleRoomCodeInput} on:submit={handleRoomCodeSubmit} />
+			<Button slot="button" on:click|once={handleRoomCodeSubmit} disabled={!roomCodeValid}>
 				<svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 					<path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
 				</svg>

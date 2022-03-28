@@ -1,7 +1,7 @@
 <script>
 	export let turn, players = [], teams = []
 
-	const getTeamPlayers = (team) => {
+    export const getTeamPlayers = (team) => {
         return players.filter((player) => (player.team === team))
     }
 </script>
@@ -9,7 +9,7 @@
 <div class="player-card">
 	<div class="card-body">
         {#each teams as team, i}
-            <div class="team {turn == team.id ? "active" : ""}">
+            <div class="team {turn == team.id ? "active" : ""}" style={turn == team.id ? "border: 0.2em solid "+team.color+";" : ""}>
                 <div class="team-name">
                     <span class="team-color" style="background-color: {team.color};"></span>
                     <span>{team.name}</span>
@@ -61,7 +61,7 @@
 		border-radius: 0.25em;
 		box-shadow: 0 0.25em 0.25em rgba(0, 0, 0, 0.1);
 		transition: all 0.2s ease-in-out;
-	}
+	} 
 
     .team-name {
         display: flex;
@@ -79,8 +79,8 @@
     }
 
     .active {
-        border: 0.2em solid #ff6130;
         box-shadow: 0 0.25em 0.25em rgba(0, 0, 0, 0.2);
+        padding: 1em 1.5em;
     }
 
     .player-name {
@@ -91,4 +91,10 @@
         color: #776e65;
     }
 
+    @media (max-width: 500px) {
+        .card-body {
+            flex-direction: column;
+            gap: 1em;
+        }
+	}
 </style>

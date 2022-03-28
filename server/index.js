@@ -1,7 +1,7 @@
 import { createServer } from "http";
 import { Server } from "socket.io";
 import { v4 as uuidv4 } from 'uuid';
-import { generateRoomCode, addToCol } from "./utils.js";
+import { generateRoomCode, addToCol, isWinningMove, isBoardFull } from "./utils.js";
 import { SessionStore } from "./sessionStore.js"
 const sessionStore = new SessionStore();
 import { RoomStore } from "./roomStore.js";
@@ -10,7 +10,7 @@ export const roomStore = new RoomStore();
 const httpServer = createServer();
 const io = new Server(httpServer, {
   cors: {
-    origin: "herokuapp.com"
+    origin: "*"
   }
 })
 
@@ -66,18 +66,16 @@ io.on("connection", async (socket) => {
     const room = {
       id: generateRoomCode(),
       players: [{ ...sessionStore.findUser(socket.userId), team: 0 }],
-      teams: [{ id: 0, name: "Team 1", color: "#fff500"}, { id: 1, name: "Team 2", color: "#ff0000"}],
+      teams: [{ id: 0, name: "Player 1", color: "#fff500"}, { id: 1, name: "Player 2", color: "#ff0000"}],
       board,
       boardWidth: WIDTH,
       boardHeight: HEIGHT,
-      turn: 0,
+      turn: -1,
       winner: null,
       started: false,
       finished: false,
       startedAt: null,
       finishedAt: null,
-      createdAt: new Date(),
-      updatedAt: new Date()
     }
     roomStore.saveRoom(room)
     socket.join(room.id)
@@ -85,7 +83,7 @@ io.on("connection", async (socket) => {
   })
 
   socket.on("joinRoom", (data, callback) => {
-    const room = roomStore.findRoom(data.id)
+    let room = roomStore.findRoom(data.id)
     if (!room || room.started) {
       return callback(new Error("invalid room"))
     }
@@ -94,12 +92,10 @@ io.on("connection", async (socket) => {
     }
     room.players.push({ ...sessionStore.findUser(socket.userId), team: 1 })
     if (room.players.length == 2) {
-      room.started = true
-      room.startedAt = new Date()
+      room = startRoom(room)
     }
     socket.join(room.id)
-    console.log("to", room.id)
-    io.to(room.id).emit("updateRoom", room)
+    updateRoom(room)
     callback(room);
   })
 
@@ -112,27 +108,32 @@ io.on("connection", async (socket) => {
   })
 
   socket.on("getTeam", (data, callback) => {
-    console.log("getTeam", data)
-    callback(roomStore.findPlayerTeam(data.id));
+    callback(roomStore.findPlayerTeamId(data.id));
   })
 
   socket.on("addToCol", (data) => {
     let room = roomStore.findRoom(data.roomId)
     let board = room.board
-    console.log("addToCol", data)
     if (!board) {
       return;
     }
-    let team = roomStore.findPlayerTeam(socket.userId, room)
+    let team = roomStore.findPlayerTeamId(socket.userId, room)
     if (!room.started || room.finished || room.turn != team ) {
       return;
     }
     board = addToCol(board, data.col, team)
     room.turn = 1 - room.turn
-    roomStore.updateRoom(data.roomId, room)
-    console.log("to", data.roomId)
-    io.to(data.roomId).emit("updateRoom", room);
-    io.to(data.roomId).emit("playSound", "https://drive.google.com/uc?id=1YqdL_wbuF2MfeHV0yZcUYq1xP3mFbFQm&export=download")
+    updateRoom(room)
+    io.to(room.id).emit("playSound", "https://drive.google.com/uc?id=1YqdL_wbuF2MfeHV0yZcUYq1xP3mFbFQm&export=download")
+    console.log("isWin", isWinningMove(board, data.col, team))
+    if (isWinningMove(board, data.col, team) || isBoardFull(board)) {
+      room.turn = -1
+      room.winner = isBoardFull(board) ? -1 : team
+      room.finished = true
+      room.finishedAt = new Date()
+      updateRoom(room)
+      io.to(room.id).emit("playSound", "https://drive.google.com/uc?id=1L0uEBAYcKI74WyjedvowveEGGAgHzVNf&export=download")
+    }
   })
 
   socket.on("disconnect", async () => {
@@ -148,5 +149,19 @@ io.on("connection", async (socket) => {
     }
   });
 });
+
+function updateRoom(room) {
+  roomStore.updateRoom(room.id, room)
+  io.to(room.id).emit("updateRoom", room);
+}
+
+function startRoom(room) {
+  if (room && !room.started) {
+    room.started = true;
+    room.startedAt = new Date();
+    room.turn = room.teams[Math.floor(Math.random() * room.teams.length)].id;
+  }
+  return room
+}
 
 io.listen(3000);

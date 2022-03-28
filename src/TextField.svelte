@@ -1,8 +1,16 @@
 <script>
+    import { createEventDispatcher } from 'svelte';
     export let value = '', placeholder = '', disabled = false
+    const dispatch = createEventDispatcher();
+
+    const handleKeypress = e => {
+        if (e.charCode === 13) {
+            dispatch('submit');
+        }
+    }
 </script>
 
-<input type="text" {placeholder} {value} {disabled} on:input|preventDefault/>
+<input type="text" {placeholder} {value} {disabled} on:input|preventDefault on:keypress={handleKeypress}/>
 
 <style>
     input {
