@@ -1,6 +1,6 @@
 # connect-four
 
-This is a project template for [Svelte](https://svelte.dev) apps. It lives at https://github.com/sveltejs/template.
+This is a project template from https://github.com/sveltejs/template.
 
 ## Get started
 
