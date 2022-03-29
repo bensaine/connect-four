@@ -40,21 +40,6 @@
         z-index: 1;
 	}
 
-    .btn {
-        display: none;
-        border-radius: 10em;
-        cursor: pointer;
-        z-index: 1;
-    }
-
-    .btn.active  {
-        display: block;
-    }
-
-    .btn svg {
-        height: 25px;
-    }
-
 	@media (max-width: 560px) {
 		.grid {
 			width: 80vw;
