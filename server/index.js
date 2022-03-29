@@ -1,5 +1,7 @@
 import { createServer } from "http";
 import { Server } from "socket.io";
+import express from "express";
+import path from "path";
 import { v4 as uuidv4 } from 'uuid';
 import { generateRoomCode, addToCol, isWinningMove, isBoardFull } from "./utils.js";
 import { SessionStore } from "./sessionStore.js"
@@ -7,12 +9,19 @@ const sessionStore = new SessionStore();
 import { RoomStore } from "./roomStore.js";
 export const roomStore = new RoomStore();
 
-const httpServer = createServer();
+const PORT = process.env.PORT || 3000;
+
+const server = express()
+  .use(express.static('public'))
+  .listen(PORT, () => console.log(`Listening on ${PORT}`));
+
+const httpServer = createServer(server);
+
 const io = new Server(httpServer, {
   cors: {
     origin: "*"
   }
-})
+});
 
 io.use((socket, next) => {
   const sessionId = socket.handshake.auth.sessionId;
@@ -164,5 +173,3 @@ function startRoom(room) {
   }
   return room
 }
-
-io.listen(process.env.PORT || 3000);
