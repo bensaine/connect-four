@@ -6,8 +6,7 @@
     "build": "rollup -c",
     "dev-client": "rollup -c -w",
     "dev-server": "nodemon ./server/index.js",
-    "server": "node ./server/index.js",
-    "start": "sirv public --host $HOST --port $PORT"
+    "start": "node ./server/index.js"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.0.0",
