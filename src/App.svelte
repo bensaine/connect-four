@@ -57,7 +57,7 @@
 </script>
 
 <main>
-	<h1>Connect Four!</h1>
+	<h1>Connect Four</h1>
 	<div class="content">
 		{#if !$roomStore || Object.keys($roomStore).length == 0}
 			<Join />

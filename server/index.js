@@ -28,6 +28,7 @@ io.use((socket, next) => {
   }
   const username = socket.handshake.auth.username;
   if (!username) {
+    console.log(socket.handshake)
     return next(new Error("invalid username"));
   }
   // create new session
@@ -164,4 +165,4 @@ function startRoom(room) {
   return room
 }
 
-io.listen(3000);
+io.listen(process.env.PORT || 3000);
