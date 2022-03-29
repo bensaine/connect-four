@@ -11,11 +11,9 @@ export const roomStore = new RoomStore();
 
 const PORT = process.env.PORT || 3000;
 
-const server = express()
-  .use(express.static('public'))
-  .listen(PORT, () => console.log(`Listening on ${PORT}`));
+const server = express().use(express.static('public'))
 
-const httpServer = createServer(server);
+const httpServer = createServer(server).listen(PORT, () => console.log(`Listening on ${PORT}`));;
 
 const io = new Server(httpServer, {
   cors: {
@@ -37,7 +35,6 @@ io.use((socket, next) => {
   }
   const username = socket.handshake.auth.username;
   if (!username) {
-    console.log(socket.handshake)
     return next(new Error("invalid username"));
   }
   // create new session

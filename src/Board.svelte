@@ -9,7 +9,6 @@
     }
 
     function onMouseMove(e) {
-        console.log(e)
         var bounds = e.target.getBoundingClientRect();
         selectedCol = Math.floor((e.clientX - bounds.left)/(500/width));
         if (selectedCol < 0) selectedCol = 0;
