@@ -12,7 +12,7 @@
         background: #eee4da;
         cursor: pointer;
         outline: none;
-        font-size: 1.5em;
+        font-size: 1.35em;
         width: fit-content;
         color: #776e65;
         padding: 0.5em 0.8em;
@@ -35,7 +35,7 @@
 
     @media (max-width: 640px) {
         button {
-            font-size: 1em;
+            font-size: 0.9em;
         }
     }
 </style>

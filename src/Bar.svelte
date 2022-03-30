@@ -33,7 +33,7 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 1em;
+        padding: 0.9em;
         background: #eee4da;
         color: #776e65;
     }
@@ -42,7 +42,7 @@
         order: 2;
         text-align: center;
         text-transform: uppercase;
-        font-size: 2em;
+        font-size: 1.8em;
         font-weight: 200;
         margin: auto;
         padding: 0.13em;
@@ -52,7 +52,7 @@
         display: flex;
         align-items: center;
         justify-content: flex-start;
-        padding: 0.7em;
+        padding: 0 0.7em;
         gap: 0.5em;
         width: 10em;
     }
@@ -70,7 +70,7 @@
 
     header svg {
         cursor: pointer;
-        width: 1.5em;
+        width: 1.35em;
     }
 
     @media (max-width: 640px) {
@@ -79,7 +79,7 @@
         }
 
         h1 {
-            font-size: 1.5em;
+            font-size: 1.35em;
         }
 
         .side-left, .side-right {

@@ -9,7 +9,7 @@
 <div class="player-card">
 	<div class="card-body">
         {#each teams as team, i}
-            <div class="team {turn == team.id ? "active" : ""}" style={turn == team.id ? "border: 0.2em solid "+team.color+";" : ""}>
+            <div class="team {turn == team.id ? "active" : ""}" style={turn == team.id ? "border: 0.1.8em solid "+team.color+";" : ""}>
                 <span class="team-color" style="background-color: {team.color};"></span>
                 <div class="team-players">
                     {#each getTeamPlayers(team.id) as player}
@@ -40,7 +40,7 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 1.5em;
+        gap: 1.35em;
     }
 
 	.team {
@@ -49,7 +49,7 @@
         align-items: center;
         width: 10em;
         text-align: left;
-        padding: 0.5em 1em;
+        padding: 0.5em 0.9em;
         background-color: #f6ebe0;
 		border-radius: 0.25em;
 		box-shadow: 0 0.25em 0.25em rgba(0, 0, 0, 0.1);
@@ -64,7 +64,7 @@
     }
 
     .team-color {
-        min-width: 1em;
+        min-width: 0.9em;
         aspect-ratio: 1;
         border: 1px solid #776e65;
         border-radius: 50%;
@@ -80,7 +80,7 @@
     }
 
     .player-name {
-        font-size: 1.25em;
+        font-size: 1.13em;
     }
 
     .no-players {
@@ -97,7 +97,7 @@
         }
 
         .player-name {
-            font-size: 1em;
+            font-size: 0.9em;
         }
 	}
 </style>

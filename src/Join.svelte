@@ -90,7 +90,7 @@
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
-        gap: 1em;
+        gap: 0.9em;
 	}
 
 	.buttons {

@@ -31,13 +31,13 @@
 	.grid {
 		display: grid;
 		position: relative;
-        width: 35em;
+        width: 30em;
         aspect-ratio: 1;
 		margin: auto;
 		grid-gap: 15px;
 		padding: 15px;
 		background-image: linear-gradient(to bottom right, rgb(31 119 198), rgb(50, 96, 232));
-        border-radius: 2em;
+        border-radius: 1.8em;
         box-shadow: 4px 6px 18px 5px #44444459;
         z-index: 1;
 	}

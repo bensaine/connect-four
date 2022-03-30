@@ -19,13 +19,13 @@
 <style>
     .status {
         color: #776e65;
-        font-size: 1.5em;
+        font-size: 1.35em;
         margin: 0;
     }
 
     @media (max-width: 640px) {
         .status {
-            font-size: 1.25em;
+            font-size: 1.13em;
         }
     }
 </style>

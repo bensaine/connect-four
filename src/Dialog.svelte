@@ -39,7 +39,7 @@
         left: 50%;
         transform: translate(-50%, -50%);
         z-index: 3;
-        padding: 1em;
+        padding: 0.9em;
         border-radius: 0.5em;
         cursor: default;
     }

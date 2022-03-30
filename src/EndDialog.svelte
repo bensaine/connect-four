@@ -19,13 +19,13 @@
 
 <style>
 	.win-status {
-		font-size: 2em;
+		font-size: 1.8em;
 		margin: 0;
 	}
 
 	.dialog-btns {
 		display: flex;
 		gap: 0.5em;
-		margin-top: 2em;
+		margin-top: 1.8em;
 	}
 </style>
