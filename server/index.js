@@ -72,15 +72,15 @@ io.on("connection", async (socket) => {
     const WIDTH = 7;
     let board = []
     for (let i = 0; i < HEIGHT; i++) {
-			board.push([])
-			for (var j = 0; j < WIDTH; j++) {
-				board[i][j] = {team: -1}
-			}
-		}
+      board.push([])
+      for (var j = 0; j < WIDTH; j++) {
+        board[i][j] = { team: -1 }
+      }
+    }
     const room = {
       id: generateRoomCode(),
       players: [{ ...sessionStore.findUser(socket.userId), team: 0 }],
-      teams: [{ id: 0, name: "Player 1", color: "#fff500"}, { id: 1, name: "Player 2", color: "#ff0000"}],
+      teams: [{ id: 0, name: "Player 1", color: "#fff500" }, { id: 1, name: "Player 2", color: "#ff0000" }],
       board,
       boardWidth: WIDTH,
       boardHeight: HEIGHT,
@@ -132,7 +132,7 @@ io.on("connection", async (socket) => {
       return;
     }
     let team = roomStore.findPlayerTeamId(socket.userId, room)
-    if (!room.started || room.finished || room.turn != team ) {
+    if (!room.started || room.finished || room.turn != team) {
       return;
     }
     board = addToCol(board, data.col, team)
@@ -149,6 +149,28 @@ io.on("connection", async (socket) => {
       io.to(room.id).emit("playSound", "https://drive.google.com/uc?id=1L0uEBAYcKI74WyjedvowveEGGAgHzVNf&export=download")
     }
   })
+
+  socket.on("leaveRoom", (data) => {
+    let room = roomStore.findRoom(data.roomId)
+    if (!room) {
+      return;
+    }
+    let player = room.players.find(player => player.userId == socket.userId)
+    if (!player) {
+      return;
+    }
+
+    room.players = room.players.filter(player => player.userId != socket.userId)
+
+    socket.leave(room.id)
+    socket.emit("leaveRoom")
+    updateRoom(room)
+
+    if (!room.players) {
+      roomStore.deleteRoom(room.id)
+    }
+  })
+
 
   socket.on("disconnect", async () => {
     const matchingSockets = await io.in(socket.userId).allSockets();

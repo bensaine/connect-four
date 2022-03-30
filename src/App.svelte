@@ -38,14 +38,14 @@
 		$roomStore = room
 	});
 
+	$socketStore.on('leaveRoom', () => {
+		$roomStore = {}
+	});
+
 	$socketStore.on('playSound', (url) => {
 		if ($settingsStore.mute) return
 		let soundPlayer = new Audio(url);
 		soundPlayer.play()
-	});
-
-	$socketStore.on('gameWon', (team) => {
-		console.log("gameWon", team)
 	});
 	
 	export function getUser(userId) {

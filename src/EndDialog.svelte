@@ -13,7 +13,7 @@
 	<span>... in {(Date.parse($roomStore.finishedAt) - Date.parse($roomStore.startedAt)) / 1000} seconds</span>
 	<div class="dialog-btns">
 		<Button>View Board</Button>
-		<Button>Back to Lobby</Button>
+		<Button on:click={() => {$socketStore.emit('leaveRoom', {roomId: $roomStore.id})}}>Back to Lobby</Button>
 	</div>
 </Dialog>
 
