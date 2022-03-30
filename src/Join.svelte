@@ -59,19 +59,7 @@
 <div class="join">
 	{#if !joinMode}
 		<TextField placeholder="Username" value={username} on:input={handleUsernameInput} />
-	{/if}
-	{#if joinMode}
-		<SubmitField valid={roomCodeValid}>
-			<TextField slot="input" placeholder="Room Code" on:input={handleRoomCodeInput} on:submit={handleRoomCodeSubmit} />
-			<Button slot="button" on:click|once={handleRoomCodeSubmit} disabled={!roomCodeValid}>
-				<svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-					<path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-				</svg>
-			</Button>
-		</SubmitField>
-	{/if}
-	{#if !joinMode}
-		<div class="buttons">
+        <div class="buttons">
 			<Button on:click|once={handleCreateClick} disabled={btnDisabled}>Create Game</Button>
 			<Button
 				on:click|once={() => {
@@ -81,6 +69,20 @@
 				disabled={btnDisabled}>Join Game</Button
 			>
 		</div>
+	{:else}
+        <button class="btn-cancel" on:click={() => {joinMode = false}}>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+		<SubmitField valid={roomCodeValid}>
+			<TextField slot="input" placeholder="Room Code" on:input={handleRoomCodeInput} on:submit={handleRoomCodeSubmit} />
+			<Button slot="button" on:click|once={handleRoomCodeSubmit} disabled={!roomCodeValid}>
+				<svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+				</svg>
+			</Button>
+		</SubmitField>
 	{/if}
 </div>
 
@@ -95,14 +97,22 @@
 
 	.buttons {
 		display: flex;
+        order: 2;
 		justify-content: space-around;
 		align-items: center;
 		gap: 10px;
 	}
 
-	.btn-icon {
+	.btn-icon, .btn-cancel {
 		height: 1rem;
 		width: 1rem;
-		stroke-width: 4;
 	}
+
+    .btn-cancel {
+        color: #776e65;
+    }
+
+    .btn-icon {
+		stroke-width: 4;
+    }
 </style>

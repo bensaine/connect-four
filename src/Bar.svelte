@@ -54,17 +54,6 @@
         padding: 0.13em;
     }
 
-    button {
-        cursor: pointer;
-        color: inherit;
-        background-color: inherit;
-        border: none;
-        padding: 0;
-        margin: 0;
-        outline: none;
-        display: inline-flex;
-    }
-
     .side-left, .side-right {
         display: flex;
         align-items: center;

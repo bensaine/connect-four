@@ -160,10 +160,17 @@ io.on("connection", async (socket) => {
       return;
     }
 
-    room.players = room.players.filter(player => player.userId != socket.userId)
-
     socket.leave(room.id)
     socket.emit("leaveRoom")
+    
+    room.players = room.players.filter(player => player.userId != socket.userId)
+    if (room.players.length == 1) {
+      room.turn = -1
+      room.winner = room.players[0].team
+      room.finished = true
+      room.finishedAt = new Date()
+    }
+
     updateRoom(room)
 
     if (!room.players) {

@@ -90,6 +90,7 @@
 		justify-content: center;
 		align-items: center;
 		min-height: 50%;
+		width: 100%;
 		gap: 1.8em;
 	}
 </style>

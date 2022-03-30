@@ -10,7 +10,6 @@
 <style>
     .submit {
         display: flex;
-        align-items: flex-start;
     }
 
     .submit * {
