@@ -4,7 +4,7 @@
 	import Button from "./Button.svelte"
 
 	const getStandingPhrase = () => {
-		return $roomStore.winner == -1 ? "drawed" : $roomStore.winner == getUserTeam($roomStore, $socketStore.userId) ? "won" : "lost"
+		return $roomStore.winner == -1 ? "drawed" : $roomStore.winner == getUserTeam($roomStore.players, $socketStore.userId) ? "won" : "lost"
 	}
 </script>
 
@@ -12,6 +12,7 @@
 	<h2 class="win-status">You {getStandingPhrase()}</h2>
 	<span>... in {(Date.parse($roomStore.finishedAt) - Date.parse($roomStore.startedAt)) / 1000} seconds</span>
 	<div class="dialog-btns">
+		<Button>View Board</Button>
 		<Button>Back to Lobby</Button>
 	</div>
 </Dialog>
@@ -23,6 +24,8 @@
 	}
 
 	.dialog-btns {
+		display: flex;
+		gap: 0.5em;
 		margin-top: 2em;
 	}
 </style>

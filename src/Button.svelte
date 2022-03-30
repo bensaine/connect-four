@@ -32,4 +32,10 @@
         border: 0.15em solid #ddd;
         cursor: not-allowed;
     }
+
+    @media (max-width: 640px) {
+        button {
+            font-size: 1em;
+        }
+    }
 </style>

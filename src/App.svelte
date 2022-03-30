@@ -1,15 +1,17 @@
 <script>
 	import Board from './Board.svelte'
-	import { socketStore, sessionStore, userStore, roomStore, getUserTeam } from './store.js'
+	import { socketStore, settingsStore, sessionStore, userStore, roomStore } from './store.js'
+	import Bar from './Bar.svelte';
 	import Join from './Join.svelte';
 	import EndDialog from './EndDialog.svelte';
 	import { onMount } from 'svelte';
 	import PlayerList from './PlayerList.svelte';
+	import Status from './Status.svelte';
 
 	onMount(() => {
-		const sessionId = $sessionStore;
-		if (sessionId) {
-			$socketStore.auth = { sessionId };
+		const session = $sessionStore;
+		if (session) {
+			$socketStore.auth = { sessionId: session };
 			$socketStore.connect();
 		}
 
@@ -37,6 +39,7 @@
 	});
 
 	$socketStore.on('playSound', (url) => {
+		if ($settingsStore.mute) return
 		let soundPlayer = new Audio(url);
 		soundPlayer.play()
 	});
@@ -56,20 +59,15 @@
 	}
 </script>
 
+<Bar />
 <main>
-	<h1>Connect Four</h1>
 	<div class="content">
 		{#if !$roomStore || Object.keys($roomStore).length == 0}
 			<Join />
 		{:else}
+			<Status />
 			<PlayerList players={$roomStore.players} teams={$roomStore.teams} turn={$roomStore.turn}/>
 			<Board board={$roomStore.board} width={$roomStore.boardWidth} height={$roomStore.boardHeight}/>
-			<div class="room-code">
-				<span>{$roomStore.id}</span>
-				<svg on:click={() => {navigator.clipboard.writeText($roomStore.id)}} xmlns="http://www.w3.org/2000/svg" class="btn-copy" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-					<path stroke-linecap="round" stroke-linejoin="round" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
-				</svg>
-			</div>
 			<EndDialog />
 		{/if}
 	</div>
@@ -77,16 +75,13 @@
 
 <style>
 	main {
+		flex: 1 1 auto;
+		display: flex;
+		justify-content: center;
+		align-items: center;
 		text-align: center;
 		margin: 0;
 		height: 100vh;
-	}
-
-	h1 {
-		color: #ff3e00;
-		text-transform: uppercase;
-		font-size: 4em;
-		font-weight: 100;
 	}
 
 	.content {
@@ -95,32 +90,6 @@
 		justify-content: center;
 		align-items: center;
 		min-height: 50%;
-	}
-
-	.room-code {
-		display: flex;
-		flex-direction: row;
-		justify-content: center;
-		align-items: center;
-		padding: 0.7em;
-		color: #776e65;
-		background: #eee4da;
-		border-top-left-radius: 0.5em;
-		gap: 0.5em;
-		position: fixed;
-		bottom: 0;
-		right: 0;
-		z-index: 1;
-	}
-
-	.btn-copy {
-		cursor: pointer;
-		width: 1.5em;
-	}
-
-	@media (min-width: 640px) {
-		main {
-			max-width: none;
-		}
+		gap: 2em;
 	}
 </style>

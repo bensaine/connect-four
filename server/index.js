@@ -56,6 +56,13 @@ io.on("connection", async (socket) => {
     userId: socket.userId,
   });
 
+  let room = roomStore.findRoomByPlayer(socket.userId)
+  if (room) {
+    socket.join(room.id)
+    updateRoom(room)
+  }
+
+
   socket.on("getUser", (data, callback) => {
     callback(sessionStore.findUser(data.id));
   })

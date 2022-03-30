@@ -1,21 +1,24 @@
 import { writable } from "svelte/store"
 import io from 'socket.io-client'
 
-export const socketStore = writable(io())
+const defaultSettings = {
+    mute: false,
+}
+
+export const socketStore = writable(io({transports: ['websocket'], upgrade: false}))
 const localSession = localStorage.getItem("sessionId")
 export const sessionStore = writable(localSession)
 sessionStore.subscribe(value => localStorage.setItem("sessionId", value))
+const localSettings = JSON.parse(localStorage.getItem("settings"))
+export const settingsStore = writable(localSettings || defaultSettings)
+settingsStore.subscribe(value => localStorage.setItem("settings", JSON.stringify(value)))
 export const userStore = writable({})
 export const roomStore = writable({})
 
-export const getUserTeam = (room, userId) => {
-    return getTeamPlayer(room, userId).team
+export const getUserTeam = (players, userId) => {
+    return players.find(player => player.userId === userId).team
 }
 
-export const getTeamPlayer = (room, userId) => {
-    return room.players.find(player => player.userId === userId)
-}
-
-export const getTeamColor = (room, teamId) => {
-    return teamId >= 0 ? room.teams.find(team => team.id == teamId).color : '#fff'
+export const getTeamColors = (teams) => {
+    return Object.assign({}, ...teams.map((team) => ({[team.id]: team.color})))
 }

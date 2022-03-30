@@ -10,10 +10,7 @@
 	<div class="card-body">
         {#each teams as team, i}
             <div class="team {turn == team.id ? "active" : ""}" style={turn == team.id ? "border: 0.2em solid "+team.color+";" : ""}>
-                <div class="team-name">
-                    <span class="team-color" style="background-color: {team.color};"></span>
-                    <span>{team.name}</span>
-                </div>
+                <span class="team-color" style="background-color: {team.color};"></span>
                 <div class="team-players">
                     {#each getTeamPlayers(team.id) as player}
                         <div class="player">
@@ -25,7 +22,7 @@
                     {#if getTeamPlayers(team.id).length == 0}
                         <div class="player">
                             <div class="player-name no-players">
-                                <span>Waiting...</span>
+                                <span>No player</span>
                             </div>
                         </div>
                     {/if}
@@ -39,10 +36,6 @@
 </div>
 
 <style>
-    .player-card {
-        margin-bottom: 2em;
-    }
-
     .card-body {
         display: flex;
         justify-content: center;
@@ -52,8 +45,8 @@
 
 	.team {
         display: flex;
-        flex-direction: column;
-        gap: 0.25em;
+        gap: 0.5em;
+        align-items: center;
         width: 10em;
         text-align: left;
         padding: 0.5em 1em;
@@ -63,16 +56,16 @@
 		transition: all 0.2s ease-in-out;
 	} 
 
-    .team-name {
+    .team-players {
         display: flex;
-        align-items: center;
-        gap: 0.5em;
-        color: #776e65;
+        flex-direction: column;
+        flex-grow: 1;
+        justify-content: center;
     }
 
     .team-color {
-        height: 1em;
-        width: 1em;
+        min-width: 1em;
+        aspect-ratio: 1;
         border: 1px solid #776e65;
         border-radius: 50%;
         display: inline-block;
@@ -80,7 +73,10 @@
 
     .active {
         box-shadow: 0 0.25em 0.25em rgba(0, 0, 0, 0.2);
-        padding: 1em 1.5em;
+    }
+
+    .player {
+        width: fit-content;
     }
 
     .player-name {
@@ -91,10 +87,17 @@
         color: #776e65;
     }
 
-    @media (max-width: 500px) {
+    @media (max-width: 640px) {
         .card-body {
-            flex-direction: column;
-            gap: 1em;
+            gap: 0.5em;
+        }
+
+        .team {
+            width: 6em;
+        }
+
+        .player-name {
+            font-size: 1em;
         }
 	}
 </style>

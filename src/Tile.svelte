@@ -3,8 +3,9 @@
 </script>
 
 <span class="tile-slot {flashing && !active ? "flashing" : ""}" style="grid-row-start: {row+1}; grid-column-start: {col}; animation-delay: {(row-1)*0.05}s; --flash-color: {flashColor}70;">
-    <span class="tile {active ? "active" : ""}" style="background: linear-gradient(0, {color + ", "+ color}cc);">
-    </span>
+    {#if active}
+        <span class="tile" style="background: linear-gradient(0, {color + ", "+ color}cc);"></span>
+    {/if}
 </span>
 
 <style>
@@ -27,9 +28,6 @@
         display: flex;
         justify-content: center;
         align-items: center;
-    }
-    
-    .active {
         animation: 0.5s ease-out 0s 1 slideDown;
         border: 3px dashed #00000059;
     }

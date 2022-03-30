@@ -31,4 +31,9 @@
         border: 0.15em solid #ddd;
     }
     
+    @media (max-width: 640px) {
+        input {
+            font-size: 1em;
+        }
+    }
 </style>
