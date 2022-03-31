@@ -37,20 +37,16 @@ export function isBoardFull(board) {
 
 export function isWinningMove(board, col, team) {
     let row = countColEmptySlots(board, col)
-    let horizontalWin = isLinearWin(getCol(board, col), team)
-    let verticalWin = isLinearWin(board[row], team)
+    let horizontalWin = isConsecutivePattern(getCol(board, col), team)
+    let verticalWin = isConsecutivePattern(board[row], team)
     let diagonalWin = isDiagonalWin(board, col, row, team)
     return horizontalWin || verticalWin || diagonalWin
 }
 
-function isLinearWin(arr, team) {
+function isConsecutivePattern(arr, team) {
     let consecutive = 0
     for (let i = 0; i < arr.length; i++) {
-        if (arr[i].team == team) {
-            consecutive++
-        } else {
-            consecutive = 0
-        }
+        consecutive += (arr[i].team == team ? 1 : 0)
         if (consecutive == 4) {
             return true
         }
@@ -59,19 +55,23 @@ function isLinearWin(arr, team) {
 }
 
 function isDiagonalWin(board, col, row, team) {
-    let leftToRight = []
-    let rightToLeft = []
-    let i = col 
-    let j = row
-    while (i >= 0 && j >= 0) {
-        leftToRight.push(board[j][i])
-        rightToLeft.unshift(board[j][i])
-        i--
-        j--
+    let colDiff = board[0].length-col
+    let rowDiff = board.length-row
+    let firstDiagonal = []
+    let firstDiagonalLength = Math.min(col-1, row-1) + Math.min(colDiff, rowDiff) + 1
+    let firstDiagonalOffset = Math.min(col, row)
+    let firstDiagonalOrigin = [col-firstDiagonalOffset, row-firstDiagonalOffset]
+    for (let i = 0; i < firstDiagonalLength; i++) {
+        firstDiagonal.push(board[firstDiagonalOrigin[1]+i][firstDiagonalOrigin[0]+i])
     }
-    console.log(leftToRight)
-    console.log(rightToLeft)
-    return leftToRight.filter(tile => tile.team == team).length == 4 || rightToLeft.filter(tile => tile.team == team).length == 4
+    let secondDiagonal = []
+    let secondDiagonalLength = Math.min(colDiff-1, row) + Math.min(rowDiff-1, col) + 1
+    let secondDiagonalOffset = Math.min(colDiff, row+1)
+    let secondDiagonalOrigin = [col+secondDiagonalOffset-1, row-secondDiagonalOffset+1]
+    for (let i = 0; i < secondDiagonalLength; i++) {
+        secondDiagonal.push(board[secondDiagonalOrigin[1]+i][secondDiagonalOrigin[0]-i])
+    }
+    return isConsecutivePattern(firstDiagonal, team) || isConsecutivePattern(secondDiagonal, team)
 }
 
 export function generateRoomCode() {

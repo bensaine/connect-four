@@ -1,7 +1,7 @@
 {
     "watch": ["src", "server"],
     "ext": ".ts,.js,.svelte,.md,.css",
-    "delay": "500",
+    "delay": "2000",
     "ignore": [],
     "exec": "npm run build && npm run start"
 }
