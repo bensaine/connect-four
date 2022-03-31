@@ -9,17 +9,25 @@
     }
 
     function onMouseMove(e) {
-        var bounds = e.target.getBoundingClientRect();
-        selectedCol = Math.floor((e.clientX - bounds.left)/(500/width));
+        const boardClientWidth = e.target.clientWidth;
+        const bounds = e.target.getBoundingClientRect();
+        selectedCol = Math.floor((e.clientX - bounds.left)/(boardClientWidth/width));
         if (selectedCol < 0) selectedCol = 0;
         if (selectedCol > width-1) selectedCol = width-1;
+    }
+
+    function onColClick(e) {
+        if (matchMedia('(hover: none)').matches) {
+            onMouseMove(e);
+        }
+        handleMove(selectedCol);
     }
 
     userTeam = getUserTeam($roomStore.players, $socketStore.userId)
     teamColors = getTeamColors($roomStore.teams)
 </script>
 
-<div class="grid" style="grid-template-columns: repeat({width}, 1fr); grid-template-rows: auto repeat({height}, 1fr);" on:mousemove={onMouseMove} on:click={handleMove(selectedCol)}>
+<div class="grid" style="grid-template-columns: repeat({width}, 1fr); grid-template-rows: auto repeat({height}, 1fr);" on:mousemove={onMouseMove} on:click={onColClick}>
     {#each board as row, y}
 		{#each row as tile, x} 
             <Tile active={tile.team >= 0} flashing={x == selectedCol && $roomStore.turn == userTeam} col={x + 1} row={y + 1} color={teamColors[tile.team]} flashColor={teamColors[userTeam]}/>
