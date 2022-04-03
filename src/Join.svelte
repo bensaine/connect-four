@@ -14,8 +14,7 @@
         btnDisabled = username.length == 0
     })
 
-    const handleUsernameInput = (e) => {
-        username = e.target.value
+    $: {
         btnDisabled = username.length == 0
     }
 
@@ -57,7 +56,7 @@
 
 <div class="join">
 	{#if !joinMode}
-		<TextField placeholder="Username" value={username} on:input={handleUsernameInput} />
+		<TextField placeholder="Username" bind:value={username} />
         <div class="buttons">
 			<Button on:click|once={handleCreateClick} disabled={btnDisabled}>Create Game</Button>
 			<Button

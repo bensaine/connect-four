@@ -2,7 +2,7 @@
 	import { roomStore, settingsStore, socketStore } from "./store.js"
 	import Dialog from "./Dialog.svelte"
 	import TextField from "./TextField.svelte"
-	let messages = [], messageField
+	let messages = [], messageInput
 
 	$socketStore.on("roomChat", (message) => {
         if (messages[messages.length - 1] && messages[messages.length - 1].user.userId == message.user.userId) {
@@ -18,17 +18,13 @@
         if ($settingsStore.chatEnabled) $settingsStore.chatNotifications = false
     }
 
-    const onInput = (e) => {
-        messageField = e.target.value
-    }
-
     const sendMessage = () => {
-        if (!messageField || messageField.length < 1) return
+        if (!messageInput || messageInput.length < 1) return
         $socketStore.emit("sendRoomChat", {
-            text: messageField,
+            text: messageInput,
             roomId: $roomStore.id,
         })
-        messageField = ""
+        messageInput = ""
     }
 </script>
 
@@ -50,7 +46,7 @@
             </div>
 		</div>
         <div class="input">
-            <TextField placeholder="Send message" value={messageField} on:input={onInput} on:submit={sendMessage}/>
+            <TextField placeholder="Send message" autofocus={true} bind:value={messageInput} on:submit={sendMessage}/>
             <button on:click={sendMessage}>
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z" />
