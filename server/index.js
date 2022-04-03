@@ -22,6 +22,7 @@ const io = new Server(httpServer, {
 
 io.use((socket, next) => {
   const sessionId = socket.handshake.auth.sessionId;
+  const username = socket.handshake.auth.username;
   if (sessionId) {
     // find existing session
     const session = sessionStore.findSession(sessionId);
@@ -32,7 +33,6 @@ io.use((socket, next) => {
       return next();
     }
   }
-  const username = socket.handshake.auth.username;
   if (!username) {
     return next(new Error("invalid username"));
   }
@@ -44,7 +44,7 @@ io.use((socket, next) => {
 });
 
 io.on("connection", async (socket) => {
-  sessionStore.saveSession(socket.sessionId, {
+  sessionStore.createSession(socket.sessionId, {
     userId: socket.userId,
     username: socket.username,
     connected: true,
@@ -63,6 +63,16 @@ io.on("connection", async (socket) => {
 
   socket.on("getUser", (data, callback) => {
     callback(sessionStore.findUser(data.id));
+  })
+
+  socket.on("setUsername", (data, callback) => {
+    sessionStore.createSession(socket.sessionId, {
+      userId: socket.userId,
+      username: data.username,
+      connected: true,
+    });
+    socket.username = data.username;
+    callback(sessionStore.findUser(socket.userId));
   })
 
   socket.on("createRoom", (callback) => {
@@ -137,7 +147,6 @@ io.on("connection", async (socket) => {
     room.turn = 1 - room.turn
     updateRoom(room)
     io.to(room.id).emit("playSound", "https://drive.google.com/uc?id=1YqdL_wbuF2MfeHV0yZcUYq1xP3mFbFQm&export=download")
-    console.log("isWin", isWinningMove(board, data.col, team))
     if (isWinningMove(board, data.col, team) || isBoardFull(board)) {
       room.turn = -1
       room.winner = isBoardFull(board) ? -1 : team
@@ -195,7 +204,7 @@ io.on("connection", async (socket) => {
     const isDisconnected = matchingSockets.size === 0;
     if (isDisconnected) {
       // update the connection status of the session
-      sessionStore.saveSession(socket.sessionId, {
+      sessionStore.createSession(socket.sessionId, {
         userId: socket.userId,
         username: socket.username,
         connected: false,

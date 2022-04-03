@@ -48,7 +48,6 @@ function isConsecutivePattern(arr, team) {
     for (let i = 0; i < arr.length; i++) {
         consecutive = (arr[i].team == team ? consecutive + 1 : 0)
         if (consecutive == 4) {
-            console.log(arr, team)
             return true
         }
     }

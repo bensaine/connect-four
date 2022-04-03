@@ -27,10 +27,10 @@
     teamColors = roomStore.getTeamColors()
 </script>
 
-<div class="grid" style="grid-template-columns: repeat({width}, 1fr); grid-template-rows: auto repeat({height}, 1fr);" on:mousemove={onMouseMove} on:click={onColClick}>
+<div class="grid" style="--width: {width}; --height: {height};" on:mousemove={onMouseMove} on:click={onColClick}>
     {#each board as row, y}
 		{#each row as tile, x} 
-            <Tile active={tile.team >= 0} flashing={x == selectedCol && $roomStore.turn == userTeam} col={x + 1} row={y + 1} color={teamColors[tile.team]} flashColor={teamColors[userTeam]}/>
+            <Tile active={tile.team >= 0} flashing={x == selectedCol && $roomStore.turn == userTeam} row={y + 1} color={teamColors[tile.team]} flashColor={teamColors[userTeam]}/>
 		{/each}
 	{/each}
 </div>
@@ -44,10 +44,13 @@
 		margin: auto;
 		grid-gap: 15px;
 		padding: 15px;
+        padding-top: 2em;
 		background-image: linear-gradient(to bottom right, rgb(31 119 198), rgb(50, 96, 232));
         border-radius: 1.8em;
         box-shadow: 4px 6px 18px 5px #44444459;
         z-index: 1;
+        grid-template-columns: repeat(var(--width), 1fr); 
+        grid-template-rows: repeat(var(--height), 1fr);
 	}
 
     @media (max-width: 640px) {

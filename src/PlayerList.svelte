@@ -6,8 +6,8 @@
 <div class="player-card">
 	<div class="card-body">
         {#each $roomStore.teams as team, i}
-            <div class="team {turn == team.id ? "active" : ""}" style={turn == team.id ? "border: 0.1.8em solid "+team.color+";" : ""}>
-                <span class="team-color" style="background-color: {team.color};"></span>
+            <div class="team" class:active={turn == team.id} style={"--team-color: "+team.color+";"}>
+                <span class="team-color"></span>
                 <div class="team-players">
                     {#each roomStore.getTeamPlayers(team.id) as player}
                         <div class="player">
@@ -61,6 +61,7 @@
     }
 
     .team-color {
+        background-color: var(--team-color);
         min-width: 0.9em;
         aspect-ratio: 1;
         border: 1px solid #776e65;
@@ -70,6 +71,7 @@
 
     .active {
         box-shadow: 0 0.25em 0.25em rgba(0, 0, 0, 0.2);
+        border: 0.1.8em solid var(--team-color);
     }
 
     .player {

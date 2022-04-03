@@ -32,6 +32,8 @@
 				console.log("roomStore", $roomStore)
 			});
 		});
+
+		$settingsStore.chatEnabled = false
 	});
 
 	$socketStore.on('updateRoom', (room) => {
@@ -48,16 +50,6 @@
 		let soundPlayer = new Audio(url);
 		soundPlayer.play()
 	});
-	
-	export function getUser(userId) {
-		console.log("getUser", userId)
-		let user;
-		$socketStore.emit('getUser', { id: userId }, (data) => {
-			console.log("getUser1", data)
-			user = data
-		});
-		return user
-	}
 </script>
 
 <Bar />

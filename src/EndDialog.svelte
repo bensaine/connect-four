@@ -2,23 +2,25 @@
 	import { roomStore, socketStore } from "./store.js"
 	import Dialog from "./Dialog.svelte"
 	import Button from "./Button.svelte"
-	let closed = false
+	let closed = false, phrase = ""
 
-	const getStandingPhrase = () => {
-		let phrase = ""
-		if ($roomStore.winner == -1) phrase = "drawed"
-		else {
-			phrase = $roomStore.winner == roomStore.getUserTeam($socketStore.userId)
-				? "won"
-				: "lost"
+	roomStore.subscribe(() => {
+		if ($roomStore.winner != null) {
+			if ($roomStore.winner == -1) {
+				phrase = "drawed"
+				return
+			}
+
+			if ($roomStore.winner == roomStore.getUserTeam($socketStore.userId))
+				phrase = "won" + ($roomStore.players.length == 1 ? " by forfeit" : "")
+			else
+				phrase = "lost"
 		}
-		if ($roomStore.players.length == 1) phrase += " by forfeit"
-		return phrase
-	}
+	})
 </script>
 
 <Dialog active={$roomStore.winner != null && !closed}>
-	<h2 class="win-status">You {getStandingPhrase()}</h2>
+	<h2 class="win-status">You {phrase}</h2>
 	<span>... in {(Date.parse($roomStore.finishedAt) - Date.parse($roomStore.startedAt)) / 1000} seconds</span>
 	<div class="dialog-btns">
 		<Button on:click={() => closed = true}>View Board</Button>

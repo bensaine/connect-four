@@ -11,8 +11,8 @@ export class SessionStore {
         return this.findAllSessions().find(session => session.userId == id);
     }
 
-    saveSession(id, room) {
-        this.sessions.set(id, room);
+    createSession(id, session) {
+        this.sessions.set(id, session);
     }
 
     findAllSessions() {

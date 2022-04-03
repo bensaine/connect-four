@@ -34,7 +34,7 @@
             <div class="messages-scroll">
                 <div class="messages">
                     {#each messages as message}
-                        <div class="message {message.user.userId == $socketStore.userId ? "self" : ""}" key={message.id}>
+                        <div class="message" class:self={message.user.userId == $socketStore.userId} key={message.id}>
                             <div class="top">
                                 <span class="username">{message.user.username}</span>
                                 <span class="timestamp">{new Date(message.timestamp).toLocaleTimeString('en-US')}</span>
@@ -93,12 +93,13 @@
         flex-direction: column;
         justify-content: flex-start;
         align-items: flex-start;
-        margin: 0.5rem;
-        padding: 0.5rem;
-        border-radius: 0.5rem;
+        margin: 0.5em;
+        padding: 0.5em;
+        border-radius: 0.5em;
+        gap: 0.3em;
         background-color: #fafafa;
         width: 80%;
-        box-shadow: 0 0 0.5rem 0 rgba(0, 0, 0, 0.1);
+        box-shadow: 0 0 0.5em 0 rgba(0, 0, 0, 0.1);
     }
 
     .message.self {

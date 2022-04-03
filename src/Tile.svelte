@@ -1,13 +1,10 @@
 <script>
-	export let active, flashing, col, row, color, flashColor
+	export let active, flashing, row, color = 'fff', flashColor
 </script>
 
-<span
-	class="tile-slot {flashing && !active ? 'flashing' : ''}"
-	style="grid-row-start: {row + 1}; grid-column-start: {col}; animation-delay: {(row - 1) * 0.05}s; --flash-color: {flashColor}70;"
->
+<span class="tile-slot" class:flashing={flashing && !active} style="animation-delay: {(row - 1) * 0.05}s; --color: {color}; --flash-color: {flashColor}70;">
 	{#if active}
-		<span class="tile" style="background: linear-gradient(0, {color + ', ' + color}cc);" />
+		<span class="tile" />
 	{/if}
 </span>
 
@@ -29,14 +26,15 @@
 		align-items: center;
 		animation: 0.5s ease-out 0s 1 slideDown;
 		border: 3px dashed #00000059;
+		background: linear-gradient(0, var(--color), var(--color) 80%);
 	}
 
-    @media (hover: hover) {
+	@media (hover: hover) {
 		.flashing {
 			animation: flash 1.5s infinite ease-in-out;
 		}
 	}
-    
+
 	@keyframes slideDown {
 		0% {
 			transform: translateY(-100em);

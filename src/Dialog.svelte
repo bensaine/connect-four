@@ -56,8 +56,7 @@
         width: 30em;
         position: absolute;
         top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+        transform: translateY( -50%);
         z-index: 3;
         padding: 0.9em;
         border-radius: 0.5em;
@@ -65,7 +64,7 @@
     }
 
     @media (max-width: 640px) {
-        dialog {
+        dialog[open] {
             width: 85%;
         }
     }

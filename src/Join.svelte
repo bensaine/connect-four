@@ -51,6 +51,11 @@
     const handleUsernameSubmit = () => {
         $socketStore.auth = { username };
         $socketStore.connect();
+        if (username != $userStore.username) {
+            $socketStore.emit('setUsername', { username: username }, (user) => {
+                $userStore = user
+            });
+        }
     }
 </script>
 
