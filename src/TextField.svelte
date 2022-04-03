@@ -1,6 +1,6 @@
 <script>
     import { createEventDispatcher } from 'svelte';
-    export let value = '', placeholder = '', disabled = false, autofocus = false
+    export let value = '', placeholder = '', disabled = false, autofocus = false, enterkeyhint = 'enter';
     const dispatch = createEventDispatcher();
 
     const handleKeypress = e => {
@@ -11,7 +11,7 @@
 </script>
 
 <!-- svelte-ignore a11y-autofocus -->
-<input type="text" {placeholder} {disabled} {autofocus} bind:value on:input|preventDefault on:keypress={handleKeypress}/>
+<input type="text" {placeholder} {disabled} {autofocus} {enterkeyhint} bind:value on:input|preventDefault on:keypress={handleKeypress}/>
 
 <style>
     input {
