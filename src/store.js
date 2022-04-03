@@ -1,7 +1,9 @@
-import { writable } from "svelte/store"
+import { get, writable } from "svelte/store"
 import io from 'socket.io-client'
 
 const defaultSettings = {
+    chatEnabled: false,
+    chatNotifications: false,
     mute: false,
 }
 
@@ -15,10 +17,14 @@ settingsStore.subscribe(value => localStorage.setItem("settings", JSON.stringify
 export const userStore = writable({})
 export const roomStore = writable({})
 
-export const getUserTeam = (players, userId) => {
-    return players.find(player => player.userId === userId).team
+roomStore.getUserTeam = (userId) => {
+    return get(roomStore).players.find(player => player.userId === userId).team
 }
 
-export const getTeamColors = (teams) => {
-    return Object.assign({}, ...teams.map((team) => ({[team.id]: team.color})))
+roomStore.getTeamPlayers = (teamId) => {
+    return get(roomStore).players.filter((player) => (player.team === teamId))
+}
+
+roomStore.getTeamColors = () => {
+    return Object.assign({}, ...get(roomStore).teams.map((team) => ({[team.id]: team.color})))
 }

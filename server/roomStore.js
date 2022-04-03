@@ -18,13 +18,18 @@ export class RoomStore {
         }
     }
 
-    saveRoom(room) {
+    createRoom(room) {
         this.rooms.push(room);
     }
 
     updateRoom(roomId, room) {  
         const index = this.rooms.findIndex(room => room.id == roomId);
         this.rooms[index] = room;
+    }
+    
+    deleteRoom(roomId) {
+        const index = this.rooms.findIndex(room => room.id == roomId);
+        this.rooms.splice(index, 1);
     }
 
     findAllRooms() {

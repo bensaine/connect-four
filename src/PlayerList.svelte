@@ -1,25 +1,22 @@
 <script>
-	export let turn, players = [], teams = []
-
-    export const getTeamPlayers = (team) => {
-        return players.filter((player) => (player.team === team))
-    }
+    import { roomStore } from './store.js';
+	export let turn
 </script>
 
 <div class="player-card">
 	<div class="card-body">
-        {#each teams as team, i}
+        {#each $roomStore.teams as team, i}
             <div class="team {turn == team.id ? "active" : ""}" style={turn == team.id ? "border: 0.1.8em solid "+team.color+";" : ""}>
                 <span class="team-color" style="background-color: {team.color};"></span>
                 <div class="team-players">
-                    {#each getTeamPlayers(team.id) as player}
+                    {#each roomStore.getTeamPlayers(team.id) as player}
                         <div class="player">
                             <div class="player-name">
                                 <span>{player.username}</span>
                             </div>
                         </div>
                     {/each}
-                    {#if getTeamPlayers(team.id).length == 0}
+                    {#if roomStore.getTeamPlayers(team.id).length == 0}
                         <div class="player">
                             <div class="player-name no-players">
                                 <span>No player</span>
@@ -28,7 +25,7 @@
                     {/if}
                 </div>
             </div>
-            {#if i != teams.length - 1}
+            {#if i != $roomStore.teams.length - 1}
                 <span class="vs">VS</span>
             {/if}
         {/each}

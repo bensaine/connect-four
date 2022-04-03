@@ -1,7 +1,6 @@
 import { createServer } from "http";
 import { Server } from "socket.io";
 import express from "express";
-import path from "path";
 import { v4 as uuidv4 } from 'uuid';
 import { generateRoomCode, addToCol, isWinningMove, isBoardFull } from "./utils.js";
 import { SessionStore } from "./sessionStore.js"
@@ -62,7 +61,6 @@ io.on("connection", async (socket) => {
     updateRoom(room)
   }
 
-
   socket.on("getUser", (data, callback) => {
     callback(sessionStore.findUser(data.id));
   })
@@ -91,7 +89,7 @@ io.on("connection", async (socket) => {
       startedAt: null,
       finishedAt: null,
     }
-    roomStore.saveRoom(room)
+    roomStore.createRoom(room)
     socket.join(room.id)
     callback(room)
   })
@@ -150,6 +148,19 @@ io.on("connection", async (socket) => {
     }
   })
 
+  socket.on("sendRoomChat", (data) => {
+    let room = roomStore.findRoom(data.roomId)
+    if (!room) {
+      return;
+    }
+    io.to(room.id).emit("roomChat", {
+      id: uuidv4(),
+      user: sessionStore.findUser(socket.userId),
+      text: data.text,
+      timestamp: new Date()
+    });
+  })
+
   socket.on("leaveRoom", (data) => {
     let room = roomStore.findRoom(data.roomId)
     if (!room) {
@@ -173,7 +184,7 @@ io.on("connection", async (socket) => {
 
     updateRoom(room)
 
-    if (!room.players) {
+    if (room.players.length == 0) {
       roomStore.deleteRoom(room.id)
     }
   })

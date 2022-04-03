@@ -1,5 +1,4 @@
 <script>
-    import { onMount } from 'svelte';
     import { socketStore, userStore, roomStore } from './store.js'
     import Button from './Button.svelte'
     import SubmitField from './SubmitField.svelte'
@@ -112,7 +111,9 @@
         color: #776e65;
     }
 
-    .btn-icon {
-		stroke-width: 4;
+    @media (max-width: 640px) {
+        .join {
+            zoom: 1.3;
+        }
     }
 </style>

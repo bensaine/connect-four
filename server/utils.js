@@ -37,8 +37,8 @@ export function isBoardFull(board) {
 
 export function isWinningMove(board, col, team) {
     let row = countColEmptySlots(board, col)
-    let horizontalWin = isConsecutivePattern(getCol(board, col), team)
-    let verticalWin = isConsecutivePattern(board[row], team)
+    let horizontalWin = isConsecutivePattern(board[row], team)
+    let verticalWin = isConsecutivePattern(getCol(board, col), team)
     let diagonalWin = isDiagonalWin(board, col, row, team)
     return horizontalWin || verticalWin || diagonalWin
 }
@@ -46,8 +46,9 @@ export function isWinningMove(board, col, team) {
 function isConsecutivePattern(arr, team) {
     let consecutive = 0
     for (let i = 0; i < arr.length; i++) {
-        consecutive += (arr[i].team == team ? 1 : 0)
+        consecutive = (arr[i].team == team ? consecutive + 1 : 0)
         if (consecutive == 4) {
+            console.log(arr, team)
             return true
         }
     }

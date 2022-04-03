@@ -1,12 +1,12 @@
 <script>
-    import { socketStore, roomStore, getUserTeam} from "./store.js";
+    import { socketStore, roomStore } from "./store.js";
     let status;
 
     roomStore.subscribe(() => {
         if (!$roomStore) return;
         if (!$roomStore.started) {
             status = "Waiting for other players";
-        } else if ($roomStore.turn == getUserTeam($roomStore.players, $socketStore.userId)) {
+        } else if ($roomStore.turn == roomStore.getUserTeam($socketStore.userId)) {
             status = "Your turn to play";
         } else {
             status = "Waiting for opponent to play"

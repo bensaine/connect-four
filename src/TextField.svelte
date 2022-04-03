@@ -5,7 +5,7 @@
 
     const handleKeypress = e => {
         if (e.charCode === 13) {
-            dispatch('submit');
+            dispatch('submit', e);
         }
     }
 </script>

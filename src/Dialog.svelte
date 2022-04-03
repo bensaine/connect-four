@@ -1,12 +1,21 @@
 <script>
-    export let active = true
+    export let active = true, closeBtn = false
 </script>
 
 {#if active}
     <div class="overlay" on:click={() => active = false}>
-        <div class="dialog">
-            <slot></slot>
-        </div>
+    </div>
+    <div class="dialog">
+        {#if closeBtn}
+            <div class="header">
+                <button on:click={() => active = false}>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+        {/if}
+        <slot></slot>
     </div>
 {/if}
 
@@ -25,6 +34,17 @@
         cursor: pointer;
     }
 
+    .header {
+        display: flex;
+        width: 100%;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+    .header svg {
+        height: 1.2em;
+    }
+
     .dialog {
         display: flex;
         flex-direction: column;
@@ -33,7 +53,7 @@
         gap: 0.5em;
         color: #776e65;
         background: #fff6ec;
-        width: 25em;
+        width: 30em;
         position: absolute;
         top: 50%;
         left: 50%;
@@ -42,5 +62,11 @@
         padding: 0.9em;
         border-radius: 0.5em;
         cursor: default;
+    }
+
+    @media (max-width: 640px) {
+        .dialog {
+            width: 85%;
+        }
     }
 </style>

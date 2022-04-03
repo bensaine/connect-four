@@ -4,6 +4,7 @@
 	import Bar from './Bar.svelte';
 	import Join from './Join.svelte';
 	import EndDialog from './EndDialog.svelte';
+	import Chat from './Chat.svelte';
 	import { onMount } from 'svelte';
 	import PlayerList from './PlayerList.svelte';
 	import Status from './Status.svelte';
@@ -69,6 +70,7 @@
 			<PlayerList players={$roomStore.players} teams={$roomStore.teams} turn={$roomStore.turn}/>
 			<Board board={$roomStore.board} width={$roomStore.boardWidth} height={$roomStore.boardHeight}/>
 			<EndDialog />
+			<Chat />
 		{/if}
 	</div>
 </main>

@@ -1,6 +1,6 @@
 <script>
     import Tile from './Tile.svelte';
-    import { socketStore, roomStore, getUserTeam, getTeamColors } from './store.js'
+    import { socketStore, roomStore } from './store.js'
     export let board, width, height;
     let selectedCol, userTeam, teamColors
 
@@ -23,8 +23,8 @@
         handleMove(selectedCol);
     }
 
-    userTeam = getUserTeam($roomStore.players, $socketStore.userId)
-    teamColors = getTeamColors($roomStore.teams)
+    userTeam = roomStore.getUserTeam($socketStore.userId)
+    teamColors = roomStore.getTeamColors()
 </script>
 
 <div class="grid" style="grid-template-columns: repeat({width}, 1fr); grid-template-rows: auto repeat({height}, 1fr);" on:mousemove={onMouseMove} on:click={onColClick}>
